@@ -14,9 +14,12 @@ models:
         data_tests:
           - not_null
       - name: tier
-        description: "Account tier, as delivered."
+        description: "Account tier, standardised to `Enterprise`, `Mid-Market` or `SMB`."
         data_tests:
           - not_null
+          - accepted_values:
+              arguments:
+                values: ['Enterprise', 'Mid-Market', 'SMB']
       - name: created_at
         description: "When the CRM record was created (UTC)."
         data_tests:
