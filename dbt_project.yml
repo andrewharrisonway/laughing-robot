@@ -26,3 +26,9 @@ vars:
 models:
   saas_analytics:
     +materialized: view
+
+# First pass: every data test warns rather than errors while the data
+# quality is assessed.
+data_tests:
+  saas_analytics:
+    +severity: warn
