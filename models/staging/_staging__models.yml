@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: stg_crm__accounts
+    description: "Typed copy of the CRM accounts export (`raw_accounts`), one row per CRM record."
+    columns:
+      - name: account_id
+        description: "Identifier of the account."
+        data_tests:
+          - unique
+          - not_null
+      - name: company_name
+        description: "Company name as held in the CRM."
+        data_tests:
+          - not_null
+      - name: tier
+        description: "Account tier, as delivered."
+        data_tests:
+          - not_null
+      - name: created_at
+        description: "When the CRM record was created (UTC)."
+        data_tests:
+          - not_null
+
+  - name: stg_billing__subscriptions
+    description: "Typed copy of the billing subscriptions export (`raw_subscriptions`), one row per subscription record."
+    columns:
+      - name: subscription_id
+        description: "Identifier of the subscription."
+        data_tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: "Account the subscription belongs to."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_crm__accounts')
+                field: account_id
+      - name: plan_id
+        description: "Plan the subscription is on."
+        data_tests:
+          - not_null
+      - name: mrr_amount
+        description: "Monthly recurring revenue of the subscription."
+        data_tests:
+          - not_null
+      - name: status
+        description: "Status of the subscription as of the export."
+        data_tests:
+          - not_null
+      - name: start_date
+        description: "Date the subscription started."
+        data_tests:
+          - not_null
+      - name: end_date
+        description: "Date the subscription ended. NULL while open-ended."
+
+  - name: stg_product__events
+    description: "Typed copy of the product event stream (`raw_events`), one row per event."
+    columns:
+      - name: event_id
+        description: "Identifier of the event."
+        data_tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: "Account the event belongs to."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_crm__accounts')
+                field: account_id
+      - name: user_id
+        description: "User who triggered the event."
+        data_tests:
+          - not_null
+      - name: event_name
+        description: "Type of event."
+        data_tests:
+          - not_null
+      - name: event_at
+        description: "When the event happened (UTC). Renamed from `timestamp`."
+        data_tests:
+          - not_null
