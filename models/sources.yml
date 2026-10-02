@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Raw operational data as extracted from three upstream systems (CRM,
+      billing, product event stream). Landed as flat files for this
+      exercise; read directly from CSV via dbt-duckdb's external source
+      support -- no seed/load step required.
+    meta:
+      external_location: "data/{name}.csv"
+    tables:
+      - name: raw_accounts
+        description: One row per account record from the CRM.
+      - name: raw_subscriptions
+        description: >
+          One row per subscription record from billing. An account can have
+          multiple rows over time (e.g. plan changes).
+      - name: raw_events
+        description: Product usage event stream. One row per event.

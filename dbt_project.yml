@@ -1,0 +1,28 @@
+name: 'saas_analytics'
+version: '1.0.0'
+config-version: 2
+
+profile: 'saas_analytics'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# as_of_date is the fixed "today" for this exercise. The raw event data only
+# covers 2026-01-01 through 2026-04-26 -- there's no activity data before or
+# after that window -- so any point-in-time logic (recency, current-month
+# MRR, etc.) should be computed relative to this date rather than the system
+# clock.
+vars:
+  as_of_date: '2026-04-26'
+
+models:
+  saas_analytics:
+    +materialized: view
