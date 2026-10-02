@@ -1,9 +1,18 @@
+{#- account_ids to leave out of this model. Add ids to the list. -#}
+{%- set account_exceptions = ['acc_105'] %} {# non-unique, matches multiple companies #}
+
 WITH
 
 raw_input AS (
     SELECT *
     FROM
         {{ source('raw', 'raw_accounts') }}
+    WHERE
+        TRUE
+    {% if account_exceptions %}
+    AND
+        account_id NOT IN ('{{ account_exceptions | join("', '") }}')
+    {% endif %}
 )
 
 , typed AS (

@@ -1,9 +1,23 @@
+{# event_ids to leave out of this model. Add ids to the list. #}
+{%- set event_exceptions = ['evt_99999'] %} {# no user_id, event_id number value is not within expectations #}
+{%- set account_exceptions = ['acc_105'] %} {# account_id not unique. Split across 2 #}
+
 WITH
 
 raw_input AS (
     SELECT *
     FROM
         {{ source('raw', 'raw_events') }}
+    WHERE
+        TRUE
+    {% if event_exceptions %}
+    AND
+        event_id NOT IN ('{{ event_exceptions | join("', '") }}')
+    {% endif %}
+    {% if account_exceptions %}
+    AND
+        account_id NOT IN ('{{ account_exceptions | join("', '") }}')
+    {% endif %}
 )
 
 , typed AS (

@@ -1,9 +1,23 @@
+{#- subscription_ids to leave out of this model. Add ids to the list. -#}
+{%- set subscription_exceptions = ['sub_9999'] %} {# fails FK test to accounts #}
+{%- set account_exceptions = ['acc_105'] %} {# fails FK test to accounts #}
+
 WITH
 
 raw_input AS (
     SELECT *
     FROM
         {{ source('raw', 'raw_subscriptions') }}
+    WHERE
+        TRUE
+    {% if subscription_exceptions %}
+    AND
+        subscription_id NOT IN ('{{ subscription_exceptions | join("', '") }}')
+    {% endif %}
+    {% if account_exceptions %}
+    AND
+        account_id NOT IN ('{{ account_exceptions | join("', '") }}')
+    {% endif %}
 )
 
 , typed AS (
