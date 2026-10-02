@@ -49,15 +49,15 @@ models:
         description: "Monthly recurring revenue of the subscription."
         data_tests:
           - not_null
-      - name: status
+      - name: subscription_status
         description: "Status of the subscription as of the export."
         data_tests:
           - not_null
-      - name: start_date
+      - name: subscription_start_date
         description: "Date the subscription started."
         data_tests:
           - not_null
-      - name: end_date
+      - name: subscription_end_date
         description: "Date the subscription ended. NULL while open-ended."
 
   - name: stg_product__events
